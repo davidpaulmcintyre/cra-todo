@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getTodos, deleteTodo, editTodo, addTodo } from '../actions';
+import { getTodos, deleteTodo, editTodo, addTodo } from '../actions/todo';
 import TodoList from './TodoList';  
 
 class TodoContainer extends React.Component {
@@ -34,13 +34,13 @@ const mapDispatchToProps = dispatch => {
     getTodos: () => {
       dispatch(getTodos());
     },  
-    deleteTodo: id => (
+    deleteTodo: (id) => (
       dispatch(deleteTodo(id))
     ),
-    addTodo: lbl => {
+    addTodo: (lbl) => {
       dispatch(addTodo(lbl))
     },
-    editTodo: todo => {
+    editTodo: (todo) => {
       dispatch(editTodo(todo))
     } 
   };

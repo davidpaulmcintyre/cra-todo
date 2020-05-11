@@ -1,10 +1,11 @@
 import fetch from 'isomorphic-fetch';
-import { guid } from "../utils"; 
-
+import { guid } from "../utils";  
 const rootUrl = "https://gevwera40m.execute-api.us-east-1.amazonaws.com/todo_staging";   
 export const getTodos = () => {
     return dispatch => { 
-        fetch(`${rootUrl}/todo`, {})
+        fetch(`${rootUrl}/todo`, {
+          headers:{'Authorization': global.token},
+        })
         .then(response => {
           if (response.status >= 300) {
             throw Error(response.statusText);
@@ -16,7 +17,10 @@ export const getTodos = () => {
           const items = JSON.parse(data.body);
           dispatch(receiveTodos(items)) 
         })
-        .catch (error => console.log('An error occurred.', error))
+        .catch (error => {
+          window.token = null;
+          console.log('An error occurred deleteTodo.', error)
+        })
     } 
 }
 
@@ -31,7 +35,8 @@ export const addTodo = label => {
   return dispatch => { 
     fetch(`${rootUrl}/todo`, {
       method: 'POST',
-      body: JSON.stringify({id: guid(), label, done: false})
+      body: JSON.stringify({id: guid(), label, done: false}),
+      headers:{'Authorization': global.token},
     })
     .then(response => {
       if (response.status >= 300) {
@@ -44,7 +49,10 @@ export const addTodo = label => {
       const item = JSON.parse(data.body);
       dispatch(receiveTodo(item)) 
     })
-    .catch (error => console.log('An error occurred.', error))
+    .catch (error => {
+      window.token = null;
+      console.log('An error occurred deleteTodo.', error)
+    })
   } 
 }
 
@@ -59,7 +67,8 @@ export const deleteTodo = id => {
   return dispatch => { 
     fetch(`${rootUrl}/todo`, {
       method: 'DELETE',
-      body: JSON.stringify({id})
+      body: JSON.stringify({id}),
+      headers:{'Authorization': global.token},
     })
     .then(response => {
       if (response.status >= 300) {
@@ -72,7 +81,10 @@ export const deleteTodo = id => {
       const item = JSON.parse(data.body);
       dispatch(receiveDeletedTodo(item)) 
     })
-    .catch (error => console.log('An error occurred deleteTodo.', error))
+    .catch (error => {
+      window.token = null;
+      console.log('An error occurred deleteTodo.', error)
+    })
   } 
 } 
 
@@ -80,7 +92,8 @@ export const editTodo = todo => {
   return dispatch => { 
     fetch(`${rootUrl}/todo`, {
       method: 'PUT',
-      body: JSON.stringify(todo)
+      body: JSON.stringify(todo),
+      headers:{'Authorization': global.token},
     })
     .then(response => {
       if (response.status >= 300) {
@@ -93,7 +106,10 @@ export const editTodo = todo => {
       const item = JSON.parse(data.body);
       dispatch(receiveUpdatedTodo(item)) 
     })
-    .catch (error => console.log('An error occurred editTodo.', error))
+    .catch (error => {
+      window.token = null;
+      console.log('An error occurred deleteTodo.', error)
+    })
   } 
 }  
 

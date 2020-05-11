@@ -1,31 +1,30 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { NavLink } from "react-router-dom";
-import useRouter from "use-react-router";
+import React, { useState, useEffect, useCallback, useMemo } from "react"; 
 import useInput from "../hooks/useInput";
 import useOnEnter from "../hooks/useOnEnter"; 
 import TodoItem from "./TodoItem";
 
 export default function TodoList(props) {
-  const { todos: todoProp, addTodo, editTodo, deleteTodo} = props;
+  const { todos: todoProp = [], addTodo, editTodo, deleteTodo} = props;
   const [todos, setTodos] = useState(todoProp);
+  const [filter, setFilter] = useState('all')
   useEffect(() => {
     setTodos(todoProp)
-  }, [todoProp])
-  const router = useRouter();  
-
+  }, [todoProp]) 
 
   const left = useMemo(() => todos.reduce((p, c) => p + (c.done ? 0 : 1), 0), [
     todos
   ]);
 
-  const visibleTodos = useMemo(
-    () =>
-      router.match.params.filter
-        ? todos.filter(i =>
-            router.match.params.filter === "active" ? !i.done : i.done
-          )
-        : todos,
-    [todos, router.match.params.filter]
+  const visibleTodos = useMemo( () =>  {
+    if (filter === 'active'){
+      return todos.filter(t => !t.done)
+    } else if (filter === 'completed'){
+      return todos.filter(t => t.done)
+    } else {
+      return todos;
+    } 
+  },
+    [todos, filter]
   );
 
   const anyDone = useMemo(() => todos.some(i => i.done), [todos]);
@@ -97,19 +96,19 @@ export default function TodoList(props) {
         </span>
         <ul className="filters">
           <li>
-            <NavLink exact={true} to="/" activeClassName="selected">
+            <button onClick={() => setFilter('all')} className={filter === 'all' ? 'selected' : ''}>
               All
-            </NavLink>
+            </button>
           </li>
           <li>
-            <NavLink to="/active" activeClassName="selected">
+            <button onClick={() => setFilter('active')} className={filter === 'active' ? 'selected' : ''}>
               Active
-            </NavLink>
+            </button>
           </li>
           <li>
-            <NavLink to="/completed" activeClassName="selected">
+            <button onClick={() => setFilter('completed')} className={filter === 'completed' ? 'selected' : ''}>
               Completed
-            </NavLink>
+            </button>
           </li>
         </ul>
         {anyDone && (
