@@ -18,8 +18,8 @@ const todos = (state = [], action) => {
     case 'UPDATE_TODO': {
       const ix = state.findIndex(item => item.id === action.payload.id);
       return [...state.slice(0, ix), action.payload, ...state.slice(ix + 1)]
-    } 
-
+    }  
+    
     default:
       return state;
   }

@@ -4,7 +4,7 @@ import useOnEnter from "../hooks/useOnEnter";
 import TodoItem from "./TodoItem";
 
 export default function TodoList(props) {
-  const { todos: todoProp = [], addTodo, editTodo, deleteTodo} = props;
+  const { todos: todoProp = [], addTodo, editTodo, deleteTodo, getTodoCount, count = 0} = props;
   const [todos, setTodos] = useState(todoProp);
   const [filter, setFilter] = useState('all')
   useEffect(() => {
@@ -91,26 +91,25 @@ export default function TodoList(props) {
       </section>
 
       <footer className="footer">
+        <span className="todo-count" style={{marginRight: '15px'}}>
+          Total: <strong>{count}</strong>
+        </span>  
         <span className="todo-count">
           <strong>{left}</strong> items left
         </span>
-        <ul className="filters">
-          <li>
+        <div className="filters"> 
+          <div>
             <button onClick={() => setFilter('all')} className={filter === 'all' ? 'selected' : ''}>
               All
-            </button>
-          </li>
-          <li>
+            </button> 
             <button onClick={() => setFilter('active')} className={filter === 'active' ? 'selected' : ''}>
               Active
-            </button>
-          </li>
-          <li>
+            </button> 
             <button onClick={() => setFilter('completed')} className={filter === 'completed' ? 'selected' : ''}>
               Completed
-            </button>
-          </li>
-        </ul>
+            </button> 
+          </div>
+        </div>
         {anyDone && (
           <button className="clear-completed" onClick={onClearCompleted}>
             Clear completed

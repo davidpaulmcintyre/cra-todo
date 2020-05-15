@@ -1,5 +1,5 @@
-li button {
-    margin: 3px;
+.filters button {
+    margin: 0;
     padding: 3px 7px;
     text-decoration: none;
     border: 1px solid transparent;
@@ -7,6 +7,11 @@ li button {
     cursor: pointer;
 }
 
-li button.selected {
+.filters button.selected {
     border-color: rgba(175, 47, 47, 0.2);
+}
+
+.filters div {
+    display: flex;
+    justify-content: center;
 }

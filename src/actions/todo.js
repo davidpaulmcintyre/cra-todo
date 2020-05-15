@@ -24,9 +24,41 @@ export const getTodos = () => {
     } 
 }
 
+// count of all, incl ones deleted and not returned by current GET
+export const getTodoCount = () => {
+  return dispatch => { 
+      fetch(`${rootUrl}/todo-count`, {
+        headers:{'Authorization': global.token},
+      })
+      .then(response => {
+        if (response.status >= 300) {
+          throw Error(response.statusText);
+        }
+          return response.json()
+        }
+      )
+      .then(data => { 
+        const item = JSON.parse(data.body);
+        dispatch(receiveTodoCount(item)) 
+      })
+      .catch (error => {
+        window.token = null;
+        console.log('An error occurred deleteTodo.', error)
+      })
+  } 
+}
+
 const receiveTodos = payload => {
   return {
     type: 'RECEIVE_TODOS',
+    payload
+  }
+} 
+
+
+const receiveTodoCount = payload => {
+  return {
+    type: 'RECEIVE_TODO_COUNT',
     payload
   }
 } 
@@ -48,6 +80,9 @@ export const addTodo = label => {
     .then(data => { 
       const item = JSON.parse(data.body);
       dispatch(receiveTodo(item)) 
+    })
+    .then(() => {
+      dispatch(getTodoCount());
     })
     .catch (error => {
       window.token = null;
