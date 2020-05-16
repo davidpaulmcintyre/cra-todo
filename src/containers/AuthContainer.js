@@ -25,8 +25,7 @@ class AuthContainer extends React.Component {
         const id_token = tokens.id_token; 
         this.state = { 
             isAuthenticated: id_token && id_token.length > 0 
-        } 
-        console.log('id token ', id_token) 
+        }  
         // hack: store token as global var
         window.token = id_token;
     } 

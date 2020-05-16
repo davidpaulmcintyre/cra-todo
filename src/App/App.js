@@ -5,15 +5,8 @@ import Footer from "../components/Footer";
 import AuthContainer from "../containers/AuthContainer"; 
 
 export default function App() {  
-  return <AuthContainer />
-  // return ( 
-  //     <BrowserRouter>
-  //       <React.Fragment>
-  //         <div className="todoapp">  
-  //           <Route component={AuthContainer} /> 
-  //         </div>
-  //         <Footer />
-  //       </React.Fragment>
-  //     </BrowserRouter> 
-  // );
+  return (
+    <div class="todoapp">
+      <AuthContainer /> 
+    </div> )
 }

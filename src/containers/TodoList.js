@@ -97,19 +97,23 @@ export default function TodoList(props) {
         <span className="todo-count">
           <strong>{left}</strong> items left
         </span>
-        <div className="filters"> 
-          <div>
+        <ul className="filters"> 
+          <li>
             <button onClick={() => setFilter('all')} className={filter === 'all' ? 'selected' : ''}>
               All
             </button> 
+          </li>
+          <li>
             <button onClick={() => setFilter('active')} className={filter === 'active' ? 'selected' : ''}>
               Active
             </button> 
+            </li>
+            <li>
             <button onClick={() => setFilter('completed')} className={filter === 'completed' ? 'selected' : ''}>
               Completed
             </button> 
-          </div>
-        </div>
+            </li> 
+        </ul>
         {anyDone && (
           <button className="clear-completed" onClick={onClearCompleted}>
             Clear completed

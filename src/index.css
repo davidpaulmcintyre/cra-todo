@@ -11,7 +11,19 @@
     border-color: rgba(175, 47, 47, 0.2);
 }
 
-.filters div {
-    display: flex;
-    justify-content: center;
+.filters li {
+    vertical-align: top;
+}
+
+.filters span {
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.filters .clear-completed {
+    margin-top: 3px;
+}
+
+footer.footer {
+   padding: 7px 15px 10px 15p
 }
