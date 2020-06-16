@@ -1,40 +1,29 @@
 import React from "react";    
+import { connect } from 'react-redux';
 import TodoContainer from './TodoContainer';
 import Logout from '../components/Logout' 
+import { authenticate } from '../actions/todo';
 
+// use 'implicit grant' to authenticate user using access_token
 class AuthContainer extends React.Component {
     constructor(props){
-        super(props)
-        function getToken() {
-            const hash = parseParms(document.location.hash.substring(1));
-            return hash;
-        }
-
-        function parseParms(str) {
-            var pieces = str.split("&"), data = {}, i, parts;
-            for (i = 0; i < pieces.length; i++) {
-                parts = pieces[i].split("=");
-                if (parts.length < 2) {
-                    parts.push("");
-                }
-                data[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
-            }
-            return data;
-        }  
-        const tokens = getToken(); 
-        const id_token = tokens.id_token; 
-        this.state = { 
-            isAuthenticated: id_token && id_token.length > 0 
-        }  
-        // hack: store token as global var
-        window.token = id_token;
-    } 
+        super(props) 
+        const qs = new URLSearchParams(window.location.search);
+        const access_token = qs.get('access_token');
+        const token_type = qs.get('token_type');
+        // todo: apply expiration
+        const expires_in = qs.get('expires_in');
+        if (access_token && token_type){
+            const strToken = `${token_type} ${access_token}`
+            this.props.authenticate(strToken)
+        } 
+    }  
 
     render(){
-        const { isAuthenticated } = this.state; 
-        if (isAuthenticated){
+        const { authenticated } = this.props; 
+        if (authenticated){
             return <TodoContainer /> 
-        } else if (isAuthenticated === false){
+        } else if (authenticated === false){
             return <Logout  />;
         } else {
             return <span>...Authenticating</span>
@@ -42,4 +31,18 @@ class AuthContainer extends React.Component {
     }
 }
 
-export default AuthContainer; 
+const mapStateToProps = state => {
+    return {
+        authenticated: state.authenticated
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+      authenticate: (token) => {
+        dispatch(authenticate(token));
+      },   
+    };
+  };
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(AuthContainer); 

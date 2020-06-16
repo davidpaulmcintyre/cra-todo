@@ -1,5 +1,28 @@
 import fetch from 'isomorphic-fetch';
 import { guid } from "../utils";  
+
+export const authenticate = strToken => { 
+  const url = 'https://dpm-todo-web-app.auth.us-east-1.amazoncognito.com/oauth2/userInfo'
+  return dispatch => { 
+    fetch(url, { 
+      headers: {Authorization: strToken}
+    })
+    .then(response => {
+      if (response.status >= 300) {
+        throw Error(response.statusText);
+      }
+      dispatch(receiveAuthentication(true)) 
+      // cookie will be set
+        // return response.json()
+      }
+    ) 
+    .catch (error => { 
+      console.log('An error occurred obtaining token.', error)
+      dispatch(receiveAuthentication(false)) 
+    })
+} 
+}
+
 const rootUrl = "https://gevwera40m.execute-api.us-east-1.amazonaws.com/todo_staging";   
 export const getTodos = () => {
     return dispatch => { 
@@ -28,7 +51,7 @@ export const getTodos = () => {
 export const getTodoCount = () => {
   return dispatch => { 
       fetch(`${rootUrl}/todo-count`, {
-        headers:{'Authorization': global.token},
+        // headers:{'Authorization': global.token},
       })
       .then(response => {
         if (response.status >= 300) {
@@ -68,7 +91,7 @@ export const addTodo = label => {
     fetch(`${rootUrl}/todo`, {
       method: 'POST',
       body: JSON.stringify({id: guid(), label, done: false}),
-      headers:{'Authorization': global.token},
+      // headers:{'Authorization': global.token},
     })
     .then(response => {
       if (response.status >= 300) {
@@ -103,7 +126,7 @@ export const deleteTodo = id => {
     fetch(`${rootUrl}/todo`, {
       method: 'DELETE',
       body: JSON.stringify({id}),
-      headers:{'Authorization': global.token},
+      // headers:{'Authorization': global.token},
     })
     .then(response => {
       if (response.status >= 300) {
@@ -128,7 +151,7 @@ export const editTodo = todo => {
     fetch(`${rootUrl}/todo`, {
       method: 'PUT',
       body: JSON.stringify(todo),
-      headers:{'Authorization': global.token},
+      // headers:{'Authorization': global.token},
     })
     .then(response => {
       if (response.status >= 300) {
@@ -158,6 +181,13 @@ const receiveDeletedTodo = payload => {
 const receiveUpdatedTodo = payload => {
   return {
     type: 'UPDATE_TODO',
+    payload
+  }
+} 
+
+const receiveAuthentication  = payload => {
+  return {
+    type: 'RECEIVE_AUTHENTICATION',
     payload
   }
 } 
