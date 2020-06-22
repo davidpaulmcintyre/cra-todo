@@ -8,7 +8,7 @@ import { authenticate } from '../actions/todo';
 class AuthContainer extends React.Component {
     constructor(props){
         super(props) 
-        const qs = new URLSearchParams(window.location.search);
+        const qs = new URLSearchParams(window.location.hash.replace('#','?'));
         const access_token = qs.get('access_token');
         const token_type = qs.get('token_type');
         // todo: apply expiration
