@@ -9,13 +9,12 @@ class AuthContainer extends React.Component {
     constructor(props){
         super(props) 
         const qs = new URLSearchParams(window.location.hash.replace('#','?'));
-        const access_token = qs.get('access_token');
-        const token_type = qs.get('token_type');
+        const token = qs.get('id_token'); 
         // todo: apply expiration
         const expires_in = qs.get('expires_in');
-        if (access_token && token_type){
-            const strToken = `${token_type} ${access_token}`
-            this.props.authenticate(strToken)
+        if (token){
+            window.token = token;
+            this.props.authenticate(token)
         } 
     }  
 

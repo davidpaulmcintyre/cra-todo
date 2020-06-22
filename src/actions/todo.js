@@ -11,12 +11,11 @@ export const authenticate = strToken => {
       if (response.status >= 300) {
         throw Error(response.statusText);
       }
-      dispatch(receiveAuthentication(true)) 
-      // cookie will be set
-        // return response.json()
+      dispatch(receiveAuthentication(true))  
       }
     ) 
     .catch (error => { 
+      window.token = null;
       console.log('An error occurred obtaining token.', error)
       dispatch(receiveAuthentication(false)) 
     })
@@ -27,7 +26,7 @@ const rootUrl = "https://gevwera40m.execute-api.us-east-1.amazonaws.com/todo_sta
 export const getTodos = () => {
     return dispatch => { 
         fetch(`${rootUrl}/todo`, {
-          headers:{'Authorization': global.token},
+          headers:{'Authorization': window.token},
         })
         .then(response => {
           if (response.status >= 300) {
@@ -51,7 +50,7 @@ export const getTodos = () => {
 export const getTodoCount = () => {
   return dispatch => { 
       fetch(`${rootUrl}/todo-count`, {
-        // headers:{'Authorization': global.token},
+        headers:{'Authorization': window.token},
       })
       .then(response => {
         if (response.status >= 300) {
@@ -91,7 +90,7 @@ export const addTodo = label => {
     fetch(`${rootUrl}/todo`, {
       method: 'POST',
       body: JSON.stringify({id: guid(), label, done: false}),
-      // headers:{'Authorization': global.token},
+      headers:{'Authorization': window.token},
     })
     .then(response => {
       if (response.status >= 300) {
@@ -126,7 +125,7 @@ export const deleteTodo = id => {
     fetch(`${rootUrl}/todo`, {
       method: 'DELETE',
       body: JSON.stringify({id}),
-      // headers:{'Authorization': global.token},
+      headers:{'Authorization': window.token},
     })
     .then(response => {
       if (response.status >= 300) {
@@ -151,7 +150,7 @@ export const editTodo = todo => {
     fetch(`${rootUrl}/todo`, {
       method: 'PUT',
       body: JSON.stringify(todo),
-      // headers:{'Authorization': global.token},
+      headers:{'Authorization': window.token},
     })
     .then(response => {
       if (response.status >= 300) {
